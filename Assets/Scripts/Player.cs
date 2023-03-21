@@ -33,5 +33,9 @@ public class Player : MonoBehaviour
         // Mover
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         transform.position += moveDir * Time.deltaTime * moveSpeed;
+
+        // Olhar para a direção
+        float rotateSpeed = 10;
+        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
 }
