@@ -5,8 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private LayerMask countersLayerMask;
     private bool isWalking;
-    InputManager inputManager;
+    private InputManager inputManager;
 
     private void Awake()
     {
@@ -14,6 +15,12 @@ public class Player : MonoBehaviour
     }
 
     private void Update()
+    {
+        HandleMovement();
+        HandleInteractions();
+    }
+
+    private void HandleMovement()
     {
         // Ler inputs
         Vector2 inputVector = inputManager.GetMovementVectorNormalized();
@@ -39,17 +46,19 @@ public class Player : MonoBehaviour
             if (canMove)
             {
                 moveDir = moveDirX;
-            } else
+            }
+            else
             {
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
                 canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
                 if (canMove)
                 {
                     moveDir = moveDirZ;
-                } else
+                }
+                else
                 {
                     // Realmente não consegue se mover em nenhuma direção
-                }              
+                }
             }
         }
 
@@ -59,7 +68,22 @@ public class Player : MonoBehaviour
 
         // Atualizar isWalking
         isWalking = moveDir != Vector3.zero;
+    }
 
+    private void HandleInteractions()
+    {
+        // Ler inputs
+        Vector2 inputVector = inputManager.GetMovementVectorNormalized();
+
+        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+        float interactDistance = 2;
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, interactDistance, countersLayerMask)){
+            // Checar se tem o componente ClearCounter
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                clearCounter.Interact();
+            }
+        }
     }
 
     public bool IsWalking()
