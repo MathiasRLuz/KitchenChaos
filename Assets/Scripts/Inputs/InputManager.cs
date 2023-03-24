@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
-{
+public class InputManager : MonoBehaviour {
     public static InputManager Instance;
     public event EventHandler OnInteractAction;
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour, IKitchenObjectParent {
     public class OnSelectedCounterChangedEvebtArgs : EventArgs {
         public ClearCounter selecterCounter;
     }
@@ -13,12 +13,14 @@ public class Player : MonoBehaviour {
     public static Player Instance { get; private set; }
 
     [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private LayerMask countersLayerMask;    
+    [SerializeField] private LayerMask countersLayerMask;
+    [SerializeField] private Transform kitchenObjectHoldPoint;
 
     private bool isWalking;
     private InputManager inputManager;
     private ClearCounter selectedCounter;
-
+    private KitchenObject kitchenObject;
+    
     private void Awake() {
         if (Instance == null) Instance = this; else Destroy(this);
         inputManager = InputManager.Instance;
@@ -30,7 +32,7 @@ public class Player : MonoBehaviour {
 
     private void GameInput_OnInteractAction(object sender, EventArgs e) {
         if (selectedCounter) {
-            selectedCounter.Interact();
+            selectedCounter.Interact(this);
         }
     }
 
@@ -48,7 +50,8 @@ public class Player : MonoBehaviour {
 
         // Olhar para a direção
         float rotateSpeed = 10;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        if (moveDir != Vector3.zero)
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
 
         // Checar colisões
         float playerRadius = 0.7f;
@@ -111,5 +114,25 @@ public class Player : MonoBehaviour {
 
     public bool IsWalking() {
         return isWalking;
+    }
+
+    public Transform GetKitchenObjectFollowTransform() {
+        return kitchenObjectHoldPoint;
+    }
+
+    public void SetKitchenObject(KitchenObject kitchenObject) {
+        this.kitchenObject = kitchenObject;
+    }
+
+    public KitchenObject GetKitchenObject() {
+        return kitchenObject;
+    }
+
+    public void ClearKitchenObject() {
+        kitchenObject = null;
+    }
+
+    public bool HasKitchenObject() {
+        return kitchenObject != null;
     }
 }
