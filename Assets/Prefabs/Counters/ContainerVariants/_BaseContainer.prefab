@@ -65,7 +65,7 @@ PrefabInstance:
     - target: {fileID: 3390683174337504397, guid: cca440783b972eb489a262399ff07c61,
         type: 3}
       propertyPath: m_Name
-      value: ContainerCounter
+      value: Container
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cca440783b972eb489a262399ff07c61, type: 3}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counterTopPoint: {fileID: 605985419729836816}
-  kitchenObjectSO: {fileID: 11400000, guid: 7f35f5e59fd9fba47acd141e36d60aae, type: 2}
+  kitchenObjectSO: {fileID: 0}
 --- !u!1001 &8251047679353344487
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -166,6 +166,16 @@ PrefabInstance:
     - target: {fileID: 4589716710238282923, guid: 9a9137fa2b035d34e881701d2c178192,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841286013473667211, guid: 9a9137fa2b035d34e881701d2c178192,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4841286013473667211, guid: 9a9137fa2b035d34e881701d2c178192,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
