@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent {
     public class OnSelectedCounterChangedEvebtArgs : EventArgs {
-        public ClearCounter selecterCounter;
+        public BaseCounter selecterCounter;
     }
 
     public event EventHandler<OnSelectedCounterChangedEvebtArgs> OnSelectedCounterChanged;
@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
 
     private bool isWalking;
     private InputManager inputManager;
-    private ClearCounter selectedCounter;
+    private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
     
     private void Awake() {
@@ -92,10 +92,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         float interactDistance = 2;
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, interactDistance, countersLayerMask)){
-            // Checar se tem o componente ClearCounter
-            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
-                if (selectedCounter != clearCounter) {
-                    SetSelectedCounter(clearCounter);                    
+            // Checar se tem o componente BaseCounter
+            if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter)) {
+                if (selectedCounter != baseCounter) {
+                    SetSelectedCounter(baseCounter);                    
                 }
             } else {
                 SetSelectedCounter(null);
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         }
     }
 
-    private void SetSelectedCounter (ClearCounter selectedCounter) {
+    private void SetSelectedCounter (BaseCounter selectedCounter) {
         this.selectedCounter = selectedCounter;
         OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEvebtArgs {
             selecterCounter = selectedCounter
