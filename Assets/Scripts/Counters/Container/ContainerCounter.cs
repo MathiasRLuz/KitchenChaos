@@ -17,6 +17,7 @@ public class ContainerCounter : BaseCounter
             // Verificar se é o objeto desse container
             if (player.GetKitchenObject().GetKitchenObjectSO() == kitchenObjectSO) {
                 // "Guardar" o objeto
+                OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
                 Destroy(player.GetKitchenObject().gameObject);
             }
         } else { 
