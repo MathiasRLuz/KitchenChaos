@@ -1,17 +1,41 @@
- using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public event EventHandler<OnSelectedCounterChangedEvebtArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangedEvebtArgs : EventArgs
+    {
+        public ClearCounter selecterCounter;
+    }
+    public static Player Instance { get; private set; }
+
     [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private LayerMask countersLayerMask;
+    [SerializeField] private LayerMask countersLayerMask;    
+
     private bool isWalking;
     private InputManager inputManager;
+    private ClearCounter selectedCounter;
 
     private void Awake()
     {
+        if (Instance == null) Instance = this; else Destroy(this);
         inputManager = InputManager.Instance;
+    }
+
+    private void Start()
+    {
+        inputManager.OnInteractAction += GameInput_OnInteractAction;
+    }
+
+    private void GameInput_OnInteractAction(object sender, EventArgs e)
+    {
+        if (selectedCounter)
+        {
+            selectedCounter.Interact();
+        }
     }
 
     private void Update()
@@ -79,11 +103,27 @@ public class Player : MonoBehaviour
         float interactDistance = 2;
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, interactDistance, countersLayerMask)){
             // Checar se tem o componente ClearCounter
-            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
-            {
-                clearCounter.Interact();
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
+                if (selectedCounter != clearCounter) {
+                    SetSelectedCounter(clearCounter);                    
+                }
+            } 
+            else {
+                SetSelectedCounter(null);
             }
+        } 
+        else {
+            SetSelectedCounter(null);
         }
+    }
+
+    private void SetSelectedCounter (ClearCounter selectedCounter)
+    {
+        this.selectedCounter = selectedCounter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEvebtArgs
+        {
+            selecterCounter = selectedCounter
+        });
     }
 
     public bool IsWalking()

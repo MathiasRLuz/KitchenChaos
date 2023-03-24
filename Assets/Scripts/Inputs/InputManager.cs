@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public static InputManager Instance;
+    public event EventHandler OnInteractAction;
+
     private PlayerInputActions playerInputActions;
 
     private void Awake()
@@ -12,6 +15,13 @@ public class InputManager : MonoBehaviour
         if (Instance == null) Instance = this; else Destroy(this);
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+        playerInputActions.Player.Interact.performed += Interact_performed;
+    }
+
+    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {        
+        // Checar se o evento tem listeners. para então disparar o evento
+        OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetMovementVectorNormalized()
