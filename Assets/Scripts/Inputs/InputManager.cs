@@ -10,22 +10,19 @@ public class InputManager : MonoBehaviour
 
     private PlayerInputActions playerInputActions;
 
-    private void Awake()
-    {
+    private void Awake() {
         if (Instance == null) Instance = this; else Destroy(this);
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Interact.performed += Interact_performed;
     }
 
-    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {        
+    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {        
         // Checar se o evento tem listeners. para então disparar o evento
         OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
 
-    public Vector2 GetMovementVectorNormalized()
-    {
+    public Vector2 GetMovementVectorNormalized() {
         // Ler inputs
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
 

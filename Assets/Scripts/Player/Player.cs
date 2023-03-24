@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
-    public event EventHandler<OnSelectedCounterChangedEvebtArgs> OnSelectedCounterChanged;
-    public class OnSelectedCounterChangedEvebtArgs : EventArgs
-    {
+public class Player : MonoBehaviour {
+    public class OnSelectedCounterChangedEvebtArgs : EventArgs {
         public ClearCounter selecterCounter;
     }
+
+    public event EventHandler<OnSelectedCounterChangedEvebtArgs> OnSelectedCounterChanged;
+    
     public static Player Instance { get; private set; }
 
     [SerializeField] private float moveSpeed = 7f;
@@ -19,27 +19,22 @@ public class Player : MonoBehaviour
     private InputManager inputManager;
     private ClearCounter selectedCounter;
 
-    private void Awake()
-    {
+    private void Awake() {
         if (Instance == null) Instance = this; else Destroy(this);
         inputManager = InputManager.Instance;
     }
 
-    private void Start()
-    {
+    private void Start() {
         inputManager.OnInteractAction += GameInput_OnInteractAction;
     }
 
-    private void GameInput_OnInteractAction(object sender, EventArgs e)
-    {
-        if (selectedCounter)
-        {
+    private void GameInput_OnInteractAction(object sender, EventArgs e) {
+        if (selectedCounter) {
             selectedCounter.Interact();
         }
     }
 
-    private void Update()
-    {
+    private void Update() {
         HandleMovement();
         HandleInteractions();
     }
@@ -62,25 +57,18 @@ public class Player : MonoBehaviour
         bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
 
         // Se não puder mover diagonalmente, checar se pode mover em apenas uma direção (horizontal ou vertical)
-        if (!canMove)
-        {
+        if (!canMove) {
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
             canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
 
-            if (canMove)
-            {
+            if (canMove) {
                 moveDir = moveDirX;
-            }
-            else
-            {
+            } else {
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
                 canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
-                if (canMove)
-                {
+                if (canMove) {
                     moveDir = moveDirZ;
-                }
-                else
-                {
+                } else {
                     // Realmente não consegue se mover em nenhuma direção
                 }
             }
@@ -94,8 +82,7 @@ public class Player : MonoBehaviour
         isWalking = moveDir != Vector3.zero;
     }
 
-    private void HandleInteractions()
-    {
+    private void HandleInteractions() {
         // Ler inputs
         Vector2 inputVector = inputManager.GetMovementVectorNormalized();
 
@@ -107,27 +94,22 @@ public class Player : MonoBehaviour
                 if (selectedCounter != clearCounter) {
                     SetSelectedCounter(clearCounter);                    
                 }
-            } 
-            else {
+            } else {
                 SetSelectedCounter(null);
             }
-        } 
-        else {
+        } else {
             SetSelectedCounter(null);
         }
     }
 
-    private void SetSelectedCounter (ClearCounter selectedCounter)
-    {
+    private void SetSelectedCounter (ClearCounter selectedCounter) {
         this.selectedCounter = selectedCounter;
-        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEvebtArgs
-        {
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEvebtArgs {
             selecterCounter = selectedCounter
         });
     }
 
-    public bool IsWalking()
-    {
+    public bool IsWalking() {
         return isWalking;
     }
 }
