@@ -12,7 +12,15 @@ public class ContainerCounter : BaseCounter
 
     public override void Interact(Player player) {
         // Verificar se o player já tem algo na mão
-        if (!player.HasKitchenObject()) {
+        if (player.HasKitchenObject()) {
+            // Player segurando algo
+            // Verificar se é o objeto desse container
+            if (player.GetKitchenObject().GetKitchenObjectSO() == kitchenObjectSO) {
+                // "Guardar" o objeto
+                Destroy(player.GetKitchenObject().gameObject);
+            }
+        } else { 
+            // Player de mãos vazias
             // Criar o objeto e passar para o player
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
             Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
