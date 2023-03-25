@@ -3,14 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent {
+public class BaseCounter : MonoBehaviour, IKitchenObjectParent {
 
     [SerializeField] private Transform counterTopPoint;
 
     private KitchenObject kitchenObject;
-    public abstract void Interact(Player player);
+    public virtual void Interact(Player player) {
+        if (!HasKitchenObject()) {
+            // Vazio 
+            if (player.HasKitchenObject()) {
+                // o player está carregando algo
+                player.GetKitchenObject().SetKitchenObjectParent(this);
+            }
+        } else {
+            // Ocupado
+            if (!player.HasKitchenObject()) {
+                // o player não está carregando algo
+                GetKitchenObject().SetKitchenObjectParent(player);
+            }
+        }
+    }
 
-    public abstract void InteractAlternate(Player player);
+    public virtual void InteractAlternate(Player player) {
+    }
 
     public Transform GetKitchenObjectFollowTransform() {
         return counterTopPoint;

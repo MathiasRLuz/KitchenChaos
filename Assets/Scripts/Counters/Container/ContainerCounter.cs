@@ -27,8 +27,4 @@ public class ContainerCounter : BaseCounter
             KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
         }
     }
-
-    public override void InteractAlternate(Player player) {
-        throw new NotImplementedException();
-    }
 }
