@@ -14,7 +14,7 @@ public class SelectedCounterVisual : MonoBehaviour
         player.OnSelectedCounterChanged += Player_OnSelectedCounterChanged;
     }
 
-    private void Player_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEvebtArgs e) {
+    private void Player_OnSelectedCounterChanged(object sender, Player.OnSelectedCounterChangedEventArgs e) {
         Show(e.selecterCounter == baseCounter);
     }
 

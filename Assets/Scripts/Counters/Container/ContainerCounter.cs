@@ -18,14 +18,17 @@ public class ContainerCounter : BaseCounter
             if (player.GetKitchenObject().GetKitchenObjectSO() == kitchenObjectSO) {
                 // "Guardar" o objeto
                 OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
-                Destroy(player.GetKitchenObject().gameObject);
+                player.GetKitchenObject().DestroySelf();
             }
         } else { 
             // Player de mãos vazias
             // Criar o objeto e passar para o player
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
-            kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
         }
+    }
+
+    public override void InteractAlternate(Player player) {
+        throw new NotImplementedException();
     }
 }

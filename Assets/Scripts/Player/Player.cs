@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent {
-    public class OnSelectedCounterChangedEvebtArgs : EventArgs {
+    public class OnSelectedCounterChangedEventArgs : EventArgs {
         public BaseCounter selecterCounter;
     }
 
-    public event EventHandler<OnSelectedCounterChangedEvebtArgs> OnSelectedCounterChanged;
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     
     public static Player Instance { get; private set; }
 
@@ -22,15 +22,22 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
     private KitchenObject kitchenObject;
     
     private void Awake() {
-        if (Instance == null) Instance = this; else Destroy(this);
-        inputManager = InputManager.Instance;
+        if (Instance == null) Instance = this; else Destroy(this);        
     }
 
     private void Start() {
-        inputManager.OnInteractAction += GameInput_OnInteractAction;
+        inputManager = InputManager.Instance;
+        inputManager.OnInteractAction += InputManager_OnInteractAction;
+        inputManager.OnInteractAlternateAction += InputManager_OnInteractAlternateAction;
     }
 
-    private void GameInput_OnInteractAction(object sender, EventArgs e) {
+    private void InputManager_OnInteractAlternateAction(object sender, EventArgs e) {
+        if (selectedCounter) {
+            selectedCounter.InteractAlternate(this);
+        }
+    }
+
+    private void InputManager_OnInteractAction(object sender, EventArgs e) {
         if (selectedCounter) {
             selectedCounter.Interact(this);
         }
@@ -107,7 +114,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
 
     private void SetSelectedCounter (BaseCounter selectedCounter) {
         this.selectedCounter = selectedCounter;
-        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEvebtArgs {
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs {
             selecterCounter = selectedCounter
         });
     }
