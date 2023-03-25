@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter {
-    [SerializeField] private KitchenObjectSO cutKitchenObjectSO;
+    [SerializeField] private CuttingRecipeSO[] cuttingRecipeSos;
 
     public override void Interact(Player player) {
     if (!HasKitchenObject()) {
@@ -23,11 +23,16 @@ public class CuttingCounter : BaseCounter {
 
     public override void InteractAlternate(Player player) {
         if (HasKitchenObject()) {
-            // a mesa está com objeto, pode cortar
-            // Destrói o inteiro
-            GetKitchenObject().DestroySelf();
-            // Spawna o cortado
-            KitchenObject.SpawnKitchenObject(cutKitchenObjectSO, this);
+            // a mesa está com objeto, pode cortar            
+            foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSos) {
+                if (GetKitchenObject().GetKitchenObjectSO() == cuttingRecipeSO.input) {
+                    // Destrói o inteiro
+                    GetKitchenObject().DestroySelf();
+                    // Spawna o cortado
+                    KitchenObject.SpawnKitchenObject(cuttingRecipeSO.output, this);
+                    break;
+                }
+            }            
         }
     }
 }

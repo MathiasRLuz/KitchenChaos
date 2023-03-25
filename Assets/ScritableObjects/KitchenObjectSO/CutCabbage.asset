@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bc97b6f59eb0554e8fbf1757f5ea4f6, type: 3}
-  m_Name: TomatoSliced
+  m_Name: CutCabbage
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5687783794423034028, guid: 492f2a745e6c247489ab44a14074494b, type: 3}
-  sprite: {fileID: 21300000, guid: c9f08c3c1ae2a364aaeaa3712540b1d4, type: 3}
-  objectName: Tomato Sliced
+  prefab: {fileID: 5687783794423034028, guid: d05241e6759253d47b4ae32217559b54, type: 3}
+  sprite: {fileID: 21300000, guid: bee24f07c57157e45a946eed3bfe8b84, type: 3}
+  objectName: Cabbage Slices

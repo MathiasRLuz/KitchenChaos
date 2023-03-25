@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3986727157863609724}
     m_Modifications:
+    - target: {fileID: 2513651689412138050, guid: d72bee846803d074784ffb8f64e993ca,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1a0afd856a35421469b28b916116fd9c, type: 2}
     - target: {fileID: 4171094756720850327, guid: d72bee846803d074784ffb8f64e993ca,
         type: 3}
       propertyPath: m_IsActive
@@ -107,6 +112,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6016978675324250517, guid: d72bee846803d074784ffb8f64e993ca,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1a0afd856a35421469b28b916116fd9c, type: 2}
+    - target: {fileID: 7398771634956237162, guid: d72bee846803d074784ffb8f64e993ca,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1a0afd856a35421469b28b916116fd9c, type: 2}
     - target: {fileID: 8101788021821549737, guid: d72bee846803d074784ffb8f64e993ca,
         type: 3}
       propertyPath: m_IsActive
@@ -250,7 +265,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counterTopPoint: {fileID: 3011318729302303615}
-  kitchenObjectSO: {fileID: 0}
+  cuttingRecipeSos:
+  - {fileID: 11400000, guid: 110100dd5e230be49b0dfb0278dcb950, type: 2}
+  - {fileID: 11400000, guid: ddc4050d3e16ec34c84e04729e78e650, type: 2}
+  - {fileID: 11400000, guid: 9e183bf1ba27fa848a85fd54b7775c1f, type: 2}
 --- !u!4 &3986727157863609724 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3390683174337504387, guid: cca440783b972eb489a262399ff07c61,
