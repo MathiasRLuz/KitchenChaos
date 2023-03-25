@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class KitchenObject : MonoBehaviour {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
-
+    private int cuttingProgress;
     private IKitchenObjectParent kitchenObjectParent;
+
+    public int GetCuttingProgress() {
+        return cuttingProgress;
+    }
+
+    public void IncreaseCuttingProgress() {
+        cuttingProgress++;
+    }
 
     public KitchenObjectSO GetKitchenObjectSO() {
         return kitchenObjectSO;
