@@ -45,4 +45,8 @@ public class KitchenObject : MonoBehaviour {
         kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
         return kitchenObject;
     }
+
+    private void Start() {
+        cuttingProgress = 0;   
+    }
 }
