@@ -9,19 +9,6 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent {
 
     private KitchenObject kitchenObject;
     public virtual void Interact(Player player) {
-        if (!HasKitchenObject()) {
-            // Vazio 
-            if (player.HasKitchenObject()) {
-                // o player está carregando algo, colocar na mesa
-                player.GetKitchenObject().SetKitchenObjectParent(this);
-            }
-        } else {
-            // Ocupado
-            if (!player.HasKitchenObject()) {
-                // o player não está carregando algo, dar objeto pro player
-                GetKitchenObject().SetKitchenObjectParent(player);
-            }
-        }
     }
 
     public virtual void InteractAlternate(Player player) {

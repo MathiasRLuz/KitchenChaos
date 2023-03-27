@@ -28,6 +28,14 @@ public class CuttingCounter : BaseCounter, IProgressBar {
                 // o player não está carregando algo, dar objeto pro player
                 GetKitchenObject().SetKitchenObjectParent(player);
                 UpdateProgressBar(0f, false);
+            } else {
+                // Player carregando algo, verificar se é prato
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
+                    // Player carregando um prato
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
             }
         }
     }

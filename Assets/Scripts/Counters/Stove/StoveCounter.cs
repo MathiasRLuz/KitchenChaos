@@ -51,6 +51,16 @@ public class StoveCounter : BaseCounter, IProgressBar {
                 GetKitchenObject().SetKitchenObjectParent(player);
                 UpdateProgressBar(0f, false, Color.yellow);
                 InvokeCookingEvent();
+            } else {
+                // Player carregando algo, verificar se é prato
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
+                    // Player carregando um prato
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) {
+                        GetKitchenObject().DestroySelf();
+                        InvokeCookingEvent();
+                        UpdateProgressBar(0f, false, Color.yellow);                        
+                    }
+                }
             }
         }
     }
