@@ -29,6 +29,10 @@ public class PlateKitchenObject : KitchenObject
         }        
     }
 
+    public List<KitchenObjectSO> GetKitchenObjectSOList() {
+        return kitchenObjectSOList;
+    }
+
     private void Awake() {
         kitchenObjectSOList = new List<KitchenObjectSO>();
     }
