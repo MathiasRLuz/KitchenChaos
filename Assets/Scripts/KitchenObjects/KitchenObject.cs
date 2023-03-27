@@ -5,7 +5,16 @@ using UnityEngine;
 public class KitchenObject : MonoBehaviour {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     private int cuttingProgress;
+    private float cookingTime;    
     private IKitchenObjectParent kitchenObjectParent;
+
+    public float GetCookingTime() {
+        return cookingTime;
+    }
+
+    public void IncreaseCookingTime(float amount) {
+        cookingTime += amount;
+    }
 
     public int GetCuttingProgress() {
         return cuttingProgress;
@@ -47,6 +56,7 @@ public class KitchenObject : MonoBehaviour {
     }
 
     private void Start() {
-        cuttingProgress = 0;   
+        cuttingProgress = 0;
+        cookingTime = 0f;
     }
 }
