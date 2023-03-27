@@ -7,16 +7,23 @@ public class ProgressBarUI : MonoBehaviour
 {
     [SerializeField] Image progressBarImage;
     [SerializeField] Image backgroundImage;
-    [SerializeField] CuttingCounter cuttingCounter;
+    [SerializeField] GameObject IProgressBarGameObject;
+    private IProgressBar progressBar;
 
     private void Start() {
-        cuttingCounter.OnProgressChanged += CuttingCounter_OnProgressChanged;
+        progressBar = IProgressBarGameObject.GetComponent<IProgressBar>();
+        if (progressBar == null) {
+            Debug.LogWarning($"O objeto {IProgressBarGameObject} não implementa IProgressBar");
+        } else {
+            progressBar.OnProgressChanged += ProgressBar_OnProgressChanged;            
+        }
         progressBarImage.fillAmount = 0f;
         backgroundImage.gameObject.SetActive(false);
     }
 
-    private void CuttingCounter_OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e) {
+    private void ProgressBar_OnProgressChanged(object sender, IProgressBar.OnProgressChangedEventArgs e) {
         backgroundImage.gameObject.SetActive(e.showBar);
         progressBarImage.fillAmount = e.progressNormalized;
+        progressBarImage.color = e.barColor;
     }
 }

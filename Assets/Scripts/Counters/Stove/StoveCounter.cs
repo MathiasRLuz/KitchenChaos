@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class StoveCounter : BaseCounter
-{
+public class StoveCounter : BaseCounter, IProgressBar {
     public event EventHandler<OnStoveOnEventArgs> OnStoveOn;
     public event EventHandler<OnCookingEventArgs> OnCooking;
+    public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
 
     public class OnCookingEventArgs : EventArgs {      
         public bool cooking;
@@ -16,7 +16,7 @@ public class StoveCounter : BaseCounter
         public bool stoveOn;
     }
 
-    public enum State {
+    private enum State {
         Idle,
         Cooking,
         Burning,
@@ -27,6 +27,8 @@ public class StoveCounter : BaseCounter
     private bool isStoveOn;
     private bool isCooking;
     [SerializeField] private State state;
+    [SerializeField] private Color cookingProgressBarColor;
+    [SerializeField] private Color burningProgressBarColor;
     private float burningTimeMax;
     private float burningTime;
     private CookingRecipeSO cookingRecipeSO;
@@ -47,13 +49,19 @@ public class StoveCounter : BaseCounter
             if (!player.HasKitchenObject()) {
                 // o player não está carregando algo, dar objeto pro player
                 GetKitchenObject().SetKitchenObjectParent(player);
+                UpdateProgressBar(0f, false, Color.yellow);
                 InvokeCookingEvent();
             }
         }
     }
 
     public override void InteractAlternate(Player player) {
-        if (state != State.Burned) HandleStove(); else if (!HasKitchenObject())  state = State.Idle;
+        if (state != State.Burned) 
+            HandleStove(); 
+        else if (!HasKitchenObject()) { 
+            state = State.Idle;
+            UpdateProgressBar(0f, false, Color.yellow);
+        }
     }
 
     private void HandleStove() {
@@ -86,10 +94,11 @@ public class StoveCounter : BaseCounter
                     break;
                 }                
                 if (!isCooking) {
-                    state = State.Idle;
+                    state = State.Idle;                    
                     break;
                 }
                 GetKitchenObject().IncreaseCookingTime(Time.deltaTime);
+                UpdateProgressBar(GetKitchenObject().GetCookingTime() / cookingRecipeSO.cookingTimerMax, true, cookingProgressBarColor);
                 if (GetKitchenObject().GetCookingTime() >= cookingRecipeSO.cookingTimerMax) {                    
                     // Atualizar o objeto
                     Cook(cookingRecipeSO.output);
@@ -99,8 +108,12 @@ public class StoveCounter : BaseCounter
                 break;
             case State.Burning:
                 burningTime += Time.deltaTime;
+                UpdateProgressBar(burningTime / burningTimeMax, true, burningProgressBarColor);
                 if (!isCooking) {
                     state = State.Idle;
+                    burningTime = 0f;
+                    UpdateProgressBar(0f, false, Color.red);
+                    break;
                 }
                 if (burningTime >= burningTimeMax) {
                     burningTime = 0f;
@@ -112,6 +125,7 @@ public class StoveCounter : BaseCounter
                         stoveOn = isStoveOn
                     });
                     state = State.Burned;
+                    UpdateProgressBar(0f, false, Color.red);
                 }
                 break;
             case State.Burned:
@@ -148,5 +162,13 @@ public class StoveCounter : BaseCounter
         GetKitchenObject().DestroySelf();
         // Spawna o saída
         KitchenObject.SpawnKitchenObject(kitchenObjectSO, this);
+    }
+
+    private void UpdateProgressBar(float progressNormalized, bool showBar, Color color) {
+        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+            progressNormalized = progressNormalized,
+            showBar = showBar,
+            barColor = color
+        });
     }
 }

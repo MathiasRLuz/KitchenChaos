@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CuttingCounter : BaseCounter {
+public class CuttingCounter : BaseCounter, IProgressBar {
 
     public event EventHandler OnCut;
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-    public class OnProgressChangedEventArgs : EventArgs {
-        public float progressNormalized;
-        public bool showBar;
-    }
+    public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
+    
 
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSos;
-
+    [SerializeField] private Color cuttingProgressBarColor;
     public override void Interact(Player player) {
         if (!HasKitchenObject()) {
             // Vazio 
@@ -67,9 +64,10 @@ public class CuttingCounter : BaseCounter {
     }
 
     private void UpdateProgressBar(float progressNormalized, bool showBar) {
-        OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs {
+        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
             progressNormalized = progressNormalized,
-            showBar = showBar
+            showBar = showBar,
+            barColor = cuttingProgressBarColor
         });
     }
 }

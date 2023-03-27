@@ -1875,6 +1875,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1546297871851860495, guid: c69ff4b15bd86cf4ab31bb8c1fb14e41,
+        type: 3}
+      propertyPath: burningProgressBarColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1546297871851860495, guid: c69ff4b15bd86cf4ab31bb8c1fb14e41,
+        type: 3}
+      propertyPath: cookingProgressBarColor.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c69ff4b15bd86cf4ab31bb8c1fb14e41, type: 3}
 --- !u!1001 &1469846282
@@ -1987,22 +1997,22 @@ PrefabInstance:
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
@@ -2012,7 +2022,7 @@ PrefabInstance:
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 3986727157863609724, guid: 52374d09799e7a14ea7335d3c4457b85,
         type: 3}
