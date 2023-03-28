@@ -5,6 +5,7 @@ using System;
 
 public class CuttingCounter : BaseCounter, IProgressBar {
 
+    public static event EventHandler OnAnyCut;
     public event EventHandler OnCut;
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
     
@@ -46,6 +47,7 @@ public class CuttingCounter : BaseCounter, IProgressBar {
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSO();
             if (cuttingRecipeSO != null) {
                 OnCut?.Invoke(this, EventArgs.Empty);
+                OnAnyCut?.Invoke(this, EventArgs.Empty);
                 GetKitchenObject().IncreaseCuttingProgress();
                 UpdateProgressBar((float)GetKitchenObject().GetCuttingProgress() / cuttingRecipeSO.cuttingProgressMax, true);
                 if (GetKitchenObject().GetCuttingProgress() >= cuttingRecipeSO.cuttingProgressMax)

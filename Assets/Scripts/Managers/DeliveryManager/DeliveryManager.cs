@@ -5,9 +5,10 @@ using System;
 public class DeliveryManager : MonoBehaviour
 {
     public static DeliveryManager Instance { get; private set; }
-
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
+    public event EventHandler<SoundManager.OnSoundEffectsEventArgs> OnDeliverSuccess;
+    public event EventHandler<SoundManager.OnSoundEffectsEventArgs> OnDeliverFailed;
     [SerializeField] private RecipeListSO recipeListSO;
     private List<RecipeSO> waitingRecipeSOList;
 
@@ -19,7 +20,7 @@ public class DeliveryManager : MonoBehaviour
         return waitingRecipeSOList;
     }
 
-    public void DeliverRecipe(PlateKitchenObject plateKitchenObject) {
+    public void DeliverRecipe(PlateKitchenObject plateKitchenObject, DeliveryCounter deliveryCounter) {
         // verificar todas as receitas pedidas (sendo aguardadas)
         foreach (RecipeSO waitingRecipeSO in waitingRecipeSOList) {
             if (waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.GetKitchenObjectSOList().Count) {
@@ -44,10 +45,16 @@ public class DeliveryManager : MonoBehaviour
                 if (recipeMatches) {                    
                     waitingRecipeSOList.Remove(waitingRecipeSO);
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    OnDeliverSuccess?.Invoke(this, new SoundManager.OnSoundEffectsEventArgs {
+                        soundPosition = deliveryCounter.gameObject.transform.position
+                    });
                     return;
                 }
             }            
         }
+        OnDeliverFailed?.Invoke(this, new SoundManager.OnSoundEffectsEventArgs {
+                        soundPosition = deliveryCounter.gameObject.transform.position
+                    });
     }
 
     private void Awake() {

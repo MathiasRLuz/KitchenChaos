@@ -13,7 +13,7 @@ public class DeliveryCounter : BaseCounter
     }
 
     private void Deliver(KitchenObject kitchenObject, PlateKitchenObject plateKitchenObject) {
-        DeliveryManager.Instance.DeliverRecipe(plateKitchenObject);
+        DeliveryManager.Instance.DeliverRecipe(plateKitchenObject, this);
         kitchenObject.DestroySelf();
     }
 }
