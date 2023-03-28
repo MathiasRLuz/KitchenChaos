@@ -1,16 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class DeliveryManager : MonoBehaviour
 {
     public static DeliveryManager Instance { get; private set; }
+
+    public event EventHandler OnRecipeSpawned;
+    public event EventHandler OnRecipeCompleted;
     [SerializeField] private RecipeListSO recipeListSO;
     private List<RecipeSO> waitingRecipeSOList;
 
     private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipesMax = 4;
+
+    public List<RecipeSO> GetWaitingRecipeSOList() {
+        return waitingRecipeSOList;
+    }
 
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject) {
         // verificar todas as receitas pedidas (sendo aguardadas)
@@ -34,15 +41,13 @@ public class DeliveryManager : MonoBehaviour
                         recipeMatches = false;                        
                     }
                 }
-                if (recipeMatches) {
-                    Debug.Log($"Entrega de {waitingRecipeSO.recipeName} realizada com sucesso");
+                if (recipeMatches) {                    
                     waitingRecipeSOList.Remove(waitingRecipeSO);
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     return;
                 }
             }            
         }
-
-        Debug.Log("Entrega incorreta");
     }
 
     private void Awake() {
@@ -51,13 +56,13 @@ public class DeliveryManager : MonoBehaviour
     }
 
     private void Update() {
-        spawnRecipeTimer += Time.deltaTime;
-        if (spawnRecipeTimer >= spawnRecipeTimerMax) {
-            spawnRecipeTimer = 0f;
+        spawnRecipeTimer -= Time.deltaTime;
+        if (spawnRecipeTimer < 0) {
+            spawnRecipeTimer = spawnRecipeTimerMax;
             if (waitingRecipeSOList.Count < waitingRecipesMax) {
-                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[Random.Range(0, recipeListSO.recipeSOList.Count)];
+                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
                 waitingRecipeSOList.Add(waitingRecipeSO);
-                Debug.Log(waitingRecipeSO.recipeName);
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
     }
