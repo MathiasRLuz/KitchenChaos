@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class DeliveryManager : MonoBehaviour
-{
+public class DeliveryManager : MonoBehaviour {
     public static DeliveryManager Instance { get; private set; }
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
@@ -15,9 +14,13 @@ public class DeliveryManager : MonoBehaviour
     private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipesMax = 4;
-
+    private int successfulRecipesDelivered;
     public List<RecipeSO> GetWaitingRecipeSOList() {
         return waitingRecipeSOList;
+    }
+
+    public int GetSuccessfulRecipesDelivered() {
+        return successfulRecipesDelivered;
     }
 
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject, DeliveryCounter deliveryCounter) {
@@ -27,7 +30,7 @@ public class DeliveryManager : MonoBehaviour
                 // mesmo numero de ingredientes
                 // verificar se todos os ingredientes da receita waitingRecipeSO estão presentes no prato
                 bool recipeMatches = true;
-                foreach (KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList) {                  
+                foreach (KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList) {
                     bool ingredientFound = false;
                     // verificar todos os ingredientes do prato
                     foreach (KitchenObjectSO plateKitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList()) {
@@ -39,27 +42,29 @@ public class DeliveryManager : MonoBehaviour
                     }
                     if (!ingredientFound) {
                         // Algum ingrediente da receita está faltando no prato
-                        recipeMatches = false;                        
+                        recipeMatches = false;
                     }
                 }
-                if (recipeMatches) {                    
+                if (recipeMatches) {
                     waitingRecipeSOList.Remove(waitingRecipeSO);
+                    successfulRecipesDelivered++;
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     OnDeliverSuccess?.Invoke(this, new SoundManager.OnSoundEffectsEventArgs {
                         soundPosition = deliveryCounter.gameObject.transform.position
                     });
                     return;
                 }
-            }            
+            }
         }
         OnDeliverFailed?.Invoke(this, new SoundManager.OnSoundEffectsEventArgs {
-                        soundPosition = deliveryCounter.gameObject.transform.position
-                    });
+            soundPosition = deliveryCounter.gameObject.transform.position
+        });
     }
 
     private void Awake() {
         if (Instance == null) Instance = this; else Destroy(this);
         waitingRecipeSOList = new List<RecipeSO>();
+        successfulRecipesDelivered = 0;
     }
 
     private void Update() {

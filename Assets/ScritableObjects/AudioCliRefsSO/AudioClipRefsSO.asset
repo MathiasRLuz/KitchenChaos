@@ -19,7 +19,7 @@ MonoBehaviour:
   deliveryFail:
   - {fileID: 8300000, guid: 400611abd7434234993616a86c030d1e, type: 3}
   - {fileID: 8300000, guid: 6a936576e1e30a640844535c71d5a149, type: 3}
-  deliverySucess:
+  deliverySuccess:
   - {fileID: 8300000, guid: 50205ffe58351d244bbcbd725dbfa802, type: 3}
   - {fileID: 8300000, guid: 4b22bfbdbacfa0445bc9bbfbb0141085, type: 3}
   footstep:
