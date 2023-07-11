@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private float waitingToStartTimer = 1f;
     private float countdownToStartTimer = 3f;
     private float gamePlayingTimer;
-    private float gamePlayingTimerMax = 10f;
+    [SerializeField] private float gamePlayingTimerMax = 10f;
 
     private void Awake() {
         if (Instance == null) Instance = this; else Destroy(this);
