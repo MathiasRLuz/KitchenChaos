@@ -19,11 +19,31 @@ public class GameManager : MonoBehaviour
     private float countdownToStartTimer = 3f;
     private float gamePlayingTimer;
     [SerializeField] private float gamePlayingTimerMax = 10f;
+    private bool isGamePaused;
 
     private void Awake() {
         if (Instance == null) Instance = this; else Destroy(this);
         state = State.WaitingToStart;
     }
+
+
+    private void OnDisable() {
+        InputManager.OnPauseAction -= InputManager_OnPauseAction;
+    }
+
+    private void OnEnable() {
+        InputManager.OnPauseAction += InputManager_OnPauseAction;
+    }
+
+    private void InputManager_OnPauseAction(object sender, EventArgs e) {
+        PauseGame();
+    }
+
+    private void PauseGame() {
+        isGamePaused = !isGamePaused;
+        Time.timeScale = isGamePaused ? 0 : 1;
+    }
+
 
     private void Update() {
         switch (state) {
